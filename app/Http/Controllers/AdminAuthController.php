@@ -7,6 +7,9 @@ use App\Models\Admin;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Auth\Events\Verified;
+
+use Illuminate\Support\Facades\Log;
 
 class AdminAuthController extends Controller
 {
@@ -30,7 +33,7 @@ class AdminAuthController extends Controller
             'password' => 'required|min:6|confirmed',
             'name' => 'nullable|string|max:255',
         ], [
-            'registration_id.required' => 'Vui lòng nhập mã đăng ký.',
+            'registration_id.required.' => 'Vui lòng nhập mã đăng ký.',
             'registration_id.unique' => 'Mã đăng ký đã được sử dụng.',
             'registration_id.size' => 'Mã đăng ký phải có độ dài 8 ký tự.',
             'email.required' => 'Vui lòng nhập email.',
@@ -59,14 +62,29 @@ class AdminAuthController extends Controller
         }
     }
 
-    /**
-     * Verify the email.
-     */
-    public function verifyEmail(EmailVerificationRequest $request)
-    {
-        $request->fulfill();
+    // public function verifyEmail(EmailVerificationRequest $request)
+    // {
 
-        return redirect()->route('admin.login')->with('success', 'Email đã được xác thực.');
+    //     $request->fulfill();
+
+    //     return redirect()->route('admin.login')->with('success', 'Email đã được xác thực.');
+    // }
+    public function verifyEmail(Request $request, $id, $hash)
+    {
+        $admin = Admin::findOrFail($id);
+    
+        if (!hash_equals((string) $hash, sha1($admin->getEmailForVerification()))) {
+            abort(403, 'URL xác minh không hợp lệ.');
+        }
+    
+        if ($admin->hasVerifiedEmail()) {
+            return redirect()->route('admin.login')->with('info', 'Email đã được xác minh trước đó.');
+        }
+    
+        $admin->markEmailAsVerified();
+        event(new Verified($admin));
+    
+        return redirect()->route('admin.login')->with('success', 'Email đã được xác minh thành công.');
     }
 
     public function showLoginForm()

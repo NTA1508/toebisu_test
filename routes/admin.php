@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminCustomerController;
 use App\Http\Controllers\AdminMemberController;
+use Illuminate\Support\Facades\Auth;
 
+Auth::routes(['verify' => true]);
 //Admin login and register
 Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
@@ -20,6 +22,9 @@ Route::prefix('admin')->group(function () {
     Route::post('/register', [AdminAuthController::class, 'register']);
 });
 
+Route::get('/email/verify/{id}/{hash}', [AdminAuthController::class, 'verifyEmail'])
+    ->middleware(['signed'])
+    ->name('verification.verify');
 
 // Admin member routes
 Route::prefix('admin/member')->group(function () {

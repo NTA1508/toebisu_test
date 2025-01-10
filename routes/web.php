@@ -31,6 +31,6 @@ require __DIR__.'/admin.php';
 
 require __DIR__.'/customer.php';
 
-require __DIR__.'/auth.php';
+// require __DIR__.'/auth.php';
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

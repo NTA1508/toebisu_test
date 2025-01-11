@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Auth\Events\Verified;
 
 class CustomerAuthController extends Controller
 {
@@ -33,5 +35,65 @@ class CustomerAuthController extends Controller
         return back()->withErrors([
             'registration_id' => 'Registration ID hoặc mật khẩu không chính xác.',
         ])->withInput($request->only('registration_id', 'remember'));
+    }
+
+        /**
+     * Show the registration form.
+     */
+    public function showRegisterForm()
+    {
+        $countries = ['Vietnam', 'USA', 'Japan', 'France', 'Germany'];
+        $hobbies = ['Reading', 'Traveling', 'Sports', 'Music', 'Movies'];
+        return view('customer.register', compact('countries', 'hobbies'));
+    }
+
+    public function register(Request $request)
+    {
+        $validatedData = $request->validate([
+            'registration_id' => 'nullable|unique:customers,registration_id|size:8',
+            'name' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:customers,email',
+            'password' => 'nullable|min:6',
+            'gender' => 'nullable|in:male,female',
+            'hobbies' => 'nullable|array',
+            'country' => 'nullable|string',
+            'profile_picture' => 'nullable|image|mimes:jpg,png,jpeg|max:2048', 
+        ]);
+
+        $validatedData['hobbies'] = $request->hobbies ? json_encode($request->hobbies) : null;
+
+        if ($request->hasFile('profile_picture')) {
+            $validatedData['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
+        }
+
+        if (!empty($validatedData['password'])) {
+            $validatedData['password'] = Hash::make($validatedData['password']);
+        } else {
+            unset($validatedData['password']);
+        }
+    
+        $customer = Customer::create($validatedData);
+
+        $customer->sendEmailVerificationNotification();
+    
+        return redirect()->route('customer.register')->with('success', 'Đăng ký!');
+    }
+
+    public function verifyEmail(Request $request, $id, $hash)
+    {
+        $customer = Customer::findOrFail($id);
+    
+        if (!hash_equals((string) $hash, sha1($customer->getEmailForVerification()))) {
+            abort(403, 'URL xác minh không hợp lệ.');
+        }
+    
+        if ($customer->hasVerifiedEmail()) {
+            return redirect()->route('customer.login')->with('info', 'Email đã được xác minh trước đó.');
+        }
+    
+        $customer->markEmailAsVerified();
+        event(new Verified($customer));
+    
+        return redirect()->route('customer.login')->with('success', 'Email đã được xác minh thành công.');
     }
 }

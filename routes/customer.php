@@ -10,14 +10,19 @@ Route::prefix('/')->group(function () {
 
     Route::post('/login', [CustomerAuthController::class, 'login'])->name('customer.login.submit');
 
-    Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('customer.logout');
-
     Route::middleware(['auth:web'])->group(function () {
         Route::get('/mypage', function () {
             return view('customer.profile'); 
         })->name('customer.profile');
     });
+
+    Route::get('/entry', [CustomerAuthController::class, 'showRegisterForm'])->name('customer.register');
+    Route::post('/entry', [CustomerAuthController::class, 'register']);
 });
+
+Route::get('/email/verify/{id}/{hash}', [CustomerAuthController::class, 'verifyEmail'])
+    ->middleware(['signed'])
+    ->name('verification.verify');
 
 // Customer profile routes
 Route::middleware(['auth:web'])->group(function () {

@@ -26,7 +26,6 @@ class AdminAuthController extends Controller
      */
     public function register(Request $request)
     {
-        // Validate input data
         $validated = $request->validate([
             'registration_id' => 'required|unique:admins,registration_id|size:8',
             'email' => 'required|email|unique:admins,email',
@@ -45,7 +44,6 @@ class AdminAuthController extends Controller
         ]);
 
         try {
-            // Create the new admin account
             $admin = Admin::create([
                 'registration_id' => $validated['registration_id'],
                 'name' => $validated['name'],
@@ -53,7 +51,6 @@ class AdminAuthController extends Controller
                 'password' => Hash::make($validated['password']),
             ]);
 
-            // Send email verification link
             $admin->sendEmailVerificationNotification();
 
             return redirect()->route('admin.register')->with('success', 'Đăng ký thành công, vui lòng kiểm tra email để xác thực.');
@@ -62,13 +59,6 @@ class AdminAuthController extends Controller
         }
     }
 
-    // public function verifyEmail(EmailVerificationRequest $request)
-    // {
-
-    //     $request->fulfill();
-
-    //     return redirect()->route('admin.login')->with('success', 'Email đã được xác thực.');
-    // }
     public function verifyEmail(Request $request, $id, $hash)
     {
         $admin = Admin::findOrFail($id);
@@ -94,7 +84,6 @@ class AdminAuthController extends Controller
 
     public function login(Request $request)
     {
-        // Validate login inputs
         $validated = $request->validate([
             'registration_id' => 'required|alpha_num|size:8',
             'password' => 'required|min:6',
@@ -104,13 +93,22 @@ class AdminAuthController extends Controller
             'password.required' => 'Vui lòng nhập mật khẩu.',
             'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
         ]);
-
+    
         if (Auth::guard('admin')->attempt($validated, $request->filled('remember'))) {
+            $user = Auth::guard('admin')->user();
+    
+            if (is_null($user->email_verified_at)) {
+                Auth::guard('admin')->logout();
+                return back()->withErrors([
+                    'registration_id' => 'Tài khoản của bạn chưa xác minh email. Vui lòng kiểm tra email để xác minh.',
+                ])->withInput($request->only('registration_id', 'remember'));
+            }
+    
             return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công!');
         }
-        
+
         return back()->withErrors([
             'registration_id' => 'Mã đăng ký hoặc mật khẩu không chính xác.',
         ])->withInput($request->only('registration_id', 'remember'));
-    }
+    }    
 }

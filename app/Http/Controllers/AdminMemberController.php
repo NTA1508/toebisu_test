@@ -39,7 +39,6 @@ class AdminMemberController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'email_verified_at' => now(),
-            'verified' => true,
         ]);
 
         return redirect()->route('admin.member.index')->with('success', 'Quản trị viên được tạo thành công.');

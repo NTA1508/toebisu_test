@@ -13,6 +13,10 @@
             </div>
         @endif
 
+        @if(session('success'))
+            <p class="success text-success">{{ session('success') }}</p>
+        @endif
+
         <form action="{{ route('customer.login') }}" method="POST">
             @csrf
 

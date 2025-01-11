@@ -8,11 +8,17 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Auth\Events\Verified;
+use App\Notifications\VerifyEmailCustom;
 
 use Illuminate\Support\Facades\Log;
 
 class AdminAuthController extends Controller
 {
+    public function sendVerificationEmail(Admin $admin)
+    {
+        // Send the custom verification email
+        $admin->notify(new VerifyEmailCustom($admin));
+    }
     /**
      * Show the registration form.
      */
@@ -27,12 +33,12 @@ class AdminAuthController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'registration_id' => 'required|unique:admins,registration_id|size:8',
-            'email' => 'required|email|unique:admins,email',
+            'registration_id' => 'required|unique:admins,registration_id|unique:customers,registration_id|size:8',
+            'email' => 'required|email|unique:admins,email|unique:customers,email',
             'password' => 'required|min:6|confirmed',
             'name' => 'nullable|string|max:255',
         ], [
-            'registration_id.required.' => 'Vui lòng nhập mã đăng ký.',
+            'registration_id.required' => 'Vui lòng nhập mã đăng ký.',
             'registration_id.unique' => 'Mã đăng ký đã được sử dụng.',
             'registration_id.size' => 'Mã đăng ký phải có độ dài 8 ký tự.',
             'email.required' => 'Vui lòng nhập email.',
@@ -51,7 +57,7 @@ class AdminAuthController extends Controller
                 'password' => Hash::make($validated['password']),
             ]);
 
-            $admin->sendEmailVerificationNotification();
+            $admin->notify(new VerifyEmailCustom($admin));
 
             return redirect()->route('admin.register')->with('success', 'Đăng ký thành công, vui lòng kiểm tra email để xác thực.');
         } catch (\Exception $e) {

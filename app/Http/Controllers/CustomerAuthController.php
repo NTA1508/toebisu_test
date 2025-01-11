@@ -50,9 +50,9 @@ class CustomerAuthController extends Controller
     public function register(Request $request)
     {
         $validatedData = $request->validate([
-            'registration_id' => 'nullable|unique:customers,registration_id|size:8',
+            'registration_id' => 'required|unique:admins,registration_id|unique:customers,registration_id|size:8',
+            'email' => 'required|email|unique:admins,email|unique:customers,email',
             'name' => 'nullable|string|max:255',
-            'email' => 'required|email|unique:customers,email',
             'password' => 'nullable|min:6',
             'gender' => 'nullable|in:male,female',
             'hobbies' => 'nullable|array',
@@ -76,7 +76,7 @@ class CustomerAuthController extends Controller
 
         $customer->sendEmailVerificationNotification();
     
-        return redirect()->route('customer.register')->with('success', 'Đăng ký!');
+        return redirect()->route('customer.register')->with('success', 'Đăng ký thành công!');
     }
 
     public function verifyEmail(Request $request, $id, $hash)

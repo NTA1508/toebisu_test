@@ -53,7 +53,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="country">Quốc gia:</label>
+                <label class="form-label" for="country">Quốc gia:</label>
                 <select class="form-select" name="country" id="country">
                     @foreach ($countries as $country)
                         <option value="{{ $country }}" {{ $customer->country == $country ? 'selected' : '' }}>{{ $country }}</option>

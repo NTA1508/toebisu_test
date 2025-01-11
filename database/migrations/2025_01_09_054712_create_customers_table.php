@@ -22,6 +22,7 @@ return new class extends Migration
             $table->json('hobbies')->nullable();
             $table->string('country')->nullable();
             $table->string('profile_picture')->nullable();
+            $table->string('role')->default('user');
             $table->rememberToken();
             $table->timestamps();
         });

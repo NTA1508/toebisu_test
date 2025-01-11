@@ -67,7 +67,7 @@
 
             <!-- Country -->
             <div class="mb-3">
-                <label for="country" class="form-label">Quốc gia:</label>
+                <label class="form-label" for="country" class="form-label">Quốc gia:</label>
                 <select class="form-select" name="country" id="country">
                 <option value="">Select a country</option>    
                     @foreach ($countries as $country)

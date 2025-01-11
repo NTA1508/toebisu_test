@@ -26,6 +26,7 @@ class Customer extends Authenticatable implements MustVerifyEmail
         'hobbies',
         'country',
         'profile_picture',
+        'role',
     ];
 
     /**

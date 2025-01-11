@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
-    <!-- Link Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -13,7 +12,7 @@
         <form action="{{ route('mypage.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            <!-- Name -->
+            <!-- Id -->
             <div class="mb-3">
             <label for="registration_id">ID:</label>
                 <input type="text" class="form-control" id="registration_id" name="registration_id" value="{{ old('registration_id', $customer->registration_id) }}"  required maxlength="8">
@@ -91,11 +90,9 @@
                 <label class="form-label">Hobbies</label>
                 <div>
                     @foreach ($hobbies as $hobby)
-                        <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="hobbies[]" id="hobby_{{ $hobby }}" 
                                 value="{{ $hobby }}" {{ in_array($hobby, $selectedHobbies) ? 'checked' : '' }}>
                             <label class="form-check-label" for="hobby_{{ $hobby }}">{{ $hobby }}</label>
-                        </div>
                     @endforeach
                 </div>
                 @error('hobbies')

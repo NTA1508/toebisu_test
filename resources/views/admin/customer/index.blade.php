@@ -4,33 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Danh sách khách hàng</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Danh sách khách hàng</h1>
+    <div class="container mt-5"></div>
+    <h1  class="text-center mb-4">Danh sách khách hàng</h1>
 
     <!-- Form tìm kiếm -->
     <form action="{{ route('admin.customer.index') }}" method="GET">
         <input type="text" name="search" value="{{ $search }}" placeholder="Search customer...">
-        <button type="submit">Search</button>
+        <button class="btn btn-primary" type="submit">Search</button>
         <a href="{{ route('admin.customer.exportCsv') }}">Export CSV</a>
     </form>
 
     <!-- Hiển thị danh sách khách hàng -->
-    <table>
+    <table class="table mt-5">
         <thead>
             <tr>
                 <th>ID</th>
@@ -70,7 +58,7 @@
                     </td>
                     <td>{{ $customer->country }}</td>
                     <td>
-                        <a href="{{ route('admin.customer.edit', $customer->id) }}">Chỉnh sửa</a>
+                        <a class="btn btn-success" href="{{ route('admin.customer.edit', $customer->id) }}">Chỉnh sửa</a>
                     </td>
                 </tr>
             @empty
@@ -81,7 +69,6 @@
         </tbody>
     </table>
 
-    <!-- Phân trang -->
     <div>
         {{ $customers->appends(['search' => $search])->links() }}
     </div>

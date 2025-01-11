@@ -1,16 +1,7 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ユーザープロフィール</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+@include('header')
 <body>
     <div class="container">
         <h2 class="mt-5">ユーザープロフィール</h2>
-        
-        <!-- Hiển thị thông tin người dùng -->
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Thông tin cá nhân</h5>
@@ -33,12 +24,12 @@
                     <p>Chưa có ảnh đại diện.</p>
                 @endif
 
-                <!-- Link đến trang chỉnh sửa thông tin -->
-                <a href="{{ route('mypage.edit') }}" class="btn btn-primary">Chỉnh sửa thông tin</a>
             </div>
+            <a href="{{ route('mypage.edit') }}" class="btn btn-primary">Chỉnh sửa thông tin</a>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+@include('footer')
 </html>

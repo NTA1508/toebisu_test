@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh sách khách hàng</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+@include('header')
 <body>
-    <div class="container mt-5"></div>
+    <div class="container mt-5">
     <h1  class="text-center mb-4">Danh sách khách hàng</h1>
 
     <!-- Form tìm kiếm -->
@@ -72,5 +65,7 @@
     <div>
         {{ $customers->appends(['search' => $search])->links() }}
     </div>
+    </div>
 </body>
+@include('footer')
 </html>

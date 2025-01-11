@@ -1,36 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
-</head>
+@include('header')
 <body>
-    <h1>Đăng nhập Customer</h1>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Đăng nhập Customer</h1>
 
-    @if ($errors->any())
-        <div>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li style="color: red;">{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+        @if ($errors->any())
+            <div>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li class="text-danger">{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-    <form action="{{ route('customer.login') }}" method="POST">
-        @csrf
-        <label for="registration_id">ID:</label>
-        <input type="registration_id" id="registration_id" name="registration_id" value="{{ old('registration_id') }}" required>
+        <form action="{{ route('customer.login') }}" method="POST">
+            @csrf
 
-        <label for="password">Mật khẩu:</label>
-        <input type="password" id="password" name="password" required>
+            <div class="mb-3">
+                <label class="form-label" for="registration_id">ID:</label>
+                <input class="form-control" type="registration_id" id="registration_id" name="registration_id" value="{{ old('registration_id') }}" required>
+            </div>
 
-        <label>
-            <input type="checkbox" name="remember"> Ghi nhớ đăng nhập
-        </label>
+            <div class="mb-3">
+                <label class="form-label" for="password">Mật khẩu:</label>
+                <input class="form-control" type="password" id="password" name="password" required>
+            </div>
 
-        <button type="submit">Đăng nhập</button>
-    </form>
+            <div class="mb-3">
+                <label class="form-label">
+                    <input class="form-check-input" type="checkbox" name="remember"> Ghi nhớ đăng nhập
+                </label>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Đăng nhập</button>
+        </form>
+    </div>
 </body>
+@include('footer')
 </html>

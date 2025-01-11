@@ -1,40 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tạo quản trị viên</title>
-</head>
+@include('header')
 <body>
-    <h1>Tạo quản trị viên</h1>
-    <form action="{{ route('admin.member.store') }}" method="POST">
-        @csrf
-        
-        <label for="registration_id">ID Đăng ký (8 ký tự):</label>
-        <input type="text" id="registration_id" name="registration_id" value="{{ old('registration_id') }}" required maxlength="8">
-        @error('registration_id')
-            <p style="color: red;">{{ $message }}</p>
-        @enderror
+    <div class="container mt-5">
+    <h1 class="text-center mb-4">Tạo quản trị viên</h1>
+        <form action="{{ route('admin.member.store') }}" method="POST">
+            @csrf
+            
+            <div class="mb-3">
+                <label class="form-label" for="registration_id">ID Đăng ký (8 ký tự):</label>
+                <input class="form-control"  type="text" id="registration_id" name="registration_id" value="{{ old('registration_id') }}" required maxlength="8">
+                @error('registration_id')
+                    <p class="text-danger">{{ $message }}</p>
+                @enderror
+            </div>
 
-        <label for="name">Tên (không bắt buộc):</label>
-        <input type="text" name="name" value="{{ old('name') }}">
-        @error('name')
-            <p style="color: red;">{{ $message }}</p>
-        @enderror
+            <div class="mb-3">
+                <label class="form-label" for="name">Tên (không bắt buộc):</label>
+                <input class="form-control"  type="text" name="name" value="{{ old('name') }}">
+                @error('name')
+                    <p class="text-danger">{{ $message }}</p>
+                @enderror
+            </div>
 
-        <label for="email">Email:</label>
-        <input type="email" name="email" value="{{ old('email') }}" required>
-        @error('email')
-            <p style="color: red;">{{ $message }}</p>
-        @enderror
+            <div class="mb-3">
+                <label class="form-label" for="email">Email:</label>
+                <input class="form-control"  type="email" name="email" value="{{ old('email') }}" required>
+                @error('email')
+                    <p class="text-danger">{{ $message }}</p>
+                @enderror
+            </div>
 
-        <label for="password">Mật khẩu:</label>
-        <input type="password" name="password" required>
-        @error('password')
-            <p style="color: red;">{{ $message }}</p>
-        @enderror
+            <div class="mb-3">
+                <label class="form-label" for="password">Mật khẩu:</label>
+                <input class="form-control"  type="password" name="password" required>
+                @error('password')
+                    <p class="text-danger">{{ $message }}</p>
+                @enderror
+            </div>
 
-        <button type="submit">Tạo mới</button>
-    </form>
+            <button class="btn btn-primary" type="submit">Tạo mới</button>
+        </form>
+    </div>
 </body>
+@include('footer')
 </html>

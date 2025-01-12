@@ -7,16 +7,10 @@ use App\Http\Controllers\AdminMemberController;
 use Illuminate\Support\Facades\Auth;
 
 Auth::routes(['verify' => true]);
-//Admin login and register
+
 Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
     Route::post('/login', [AdminAuthController::class, 'login']);
-
-    // Route::middleware(['auth:admin'])->group(function () {
-    //     Route::get('/dashboard', function () {
-    //         return view('admin.dashboard');
-    //     })->name('admin.dashboard');
-    // });
 
 
     Route::middleware(['auth:admin'])->group(function () {

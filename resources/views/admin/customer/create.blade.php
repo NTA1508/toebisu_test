@@ -1,13 +1,13 @@
 @include('header')
 <body>
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Tạo khách hàng</h1>
+        <h1 class="text-center mb-4">会員登録</h1>
         <form action="{{ route('admin.customer.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <!-- Registration ID -->
             <div class="mb-3">
-                <label class="form-label" for="registration_id">ID Đăng ký (8 ký tự):</label>
+                <label class="form-label" for="registration_id">ID:</label>
                 <input class="form-control" type="text" id="registration_id" name="registration_id" value="{{ old('registration_id') }}" required maxlength="8">
                 @error('registration_id')
                     <p class="text-danger">{{ $message }}</p>
@@ -15,7 +15,7 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="name">Tên (không bắt buộc):</label>
+                <label class="form-label" for="name">名前:</label>
                 <input class="form-control" type="text" name="name" value="{{ old('name') }}">
                 @error('name')
                     <p class="text-danger">{{ $message }}</p>
@@ -24,7 +24,7 @@
 
             <!-- Email -->
             <div class="mb-3">
-                <label class="form-label" for="email">Email:</label>
+                <label class="form-label" for="email">メール:</label>
                 <input class="form-control" type="email" name="email" value="{{ old('email') }}" required>
                 @error('email')
                     <p class="text-danger">{{ $message }}</p>
@@ -33,7 +33,7 @@
 
             <!-- Password -->
             <div class="mb-3">
-                <label class="form-label" for="password">Mật khẩu:</label>
+                <label class="form-label" for="password">パスワード：</label>
                 <input class="form-control" type="password" name="password" required>
                 @error('password')
                     <p class="text-danger">{{ $message }}</p>
@@ -42,9 +42,9 @@
 
             <!-- Gender -->
             <div class="mb-3">
-                <label class="form-label">Giới tính:</label>
-                <label class="form-check-label"><input class="form-check-input" type="radio" name="gender" value="male" {{ old('gender') == 'male' ? 'checked' : '' }}> Nam</label>
-                <label class="form-check-label"><input class="form-check-input" type="radio" name="gender" value="female" {{ old('gender') == 'female' ? 'checked' : '' }}> Nữ</label>
+                <label class="form-label">性別:</label>
+                <label class="form-check-label"><input class="form-check-input" type="radio" name="gender" value="男" {{ old('gender') == '男' ? 'checked' : '' }}>男</label>
+                <label class="form-check-label"><input class="form-check-input" type="radio" name="gender" value="女" {{ old('gender') == '女' ? 'checked' : '' }}> 女</label>
             </div>
             @error('gender')
                 <p class="text-danger">{{ $message }}</p>
@@ -52,7 +52,7 @@
 
             <!-- Hobbies -->
             <div class="mb-3">
-                <label class="form-label">Sở thích:</label>
+                <label class="form-label">趣味:</label>
                 <div>
                     @foreach ($hobbies as $hobby)
                         <label>
@@ -67,9 +67,9 @@
 
             <!-- Country -->
             <div class="mb-3">
-                <label class="form-label" for="country" class="form-label">Quốc gia:</label>
+                <label class="form-label" for="country" class="form-label">国:</label>
                 <select class="form-select" name="country" id="country">
-                <option value="">Select a country</option>    
+                <option value="">国を選択してください</option>    
                     @foreach ($countries as $country)
                         <option value="{{ $country }}" {{ old('country') == $country ? 'selected' : '' }}>{{ $country }}</option>
                     @endforeach
@@ -81,7 +81,7 @@
 
             <!-- Profile Picture -->
             <div class="mb-3">
-                <label class="form-label" for="profile_picture">Ảnh đại diện:</label>
+                <label class="form-label" for="profile_picture">プロフィール画像:</label>
                 <input class="form-control" type="file" name="profile_picture" id="profile_picture">
             </div>
             @error('profile_picture')
@@ -89,7 +89,7 @@
             @enderror
 
             <!-- Submit Button -->
-            <button class="btn btn-primary" type="submit">Đăng ký</button>
+            <button class="btn btn-primary" type="submit">会員登録</button>
         </form>
     </div>
 </body>

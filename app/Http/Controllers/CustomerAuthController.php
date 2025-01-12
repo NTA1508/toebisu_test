@@ -22,18 +22,18 @@ class CustomerAuthController extends Controller
             'registration_id' => 'required|alpha_num|size:8',
             'password' => 'required|min:6',
         ], [
-            'registration_id.required' => 'Vui lòng nhập registration_id.',
-            'registration_id.size' => 'registration_id phải có đúng 8 ký tự.',
-            'password.required' => 'Vui lòng nhập mật khẩu.',
-            'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
+            'registration_id.required' => '登録コードを入力してください',
+            'registration_id.size' => '登録コードは8文字でなければなりません',
+            'password.required' => 'パスワードを入力してください',
+            'password.min' => 'パスワードは6文字以上でなければなりません',
         ]);
 
         if (Auth::guard('web')->attempt($request->only('registration_id', 'password'), $request->filled('remember'))) {
-            return redirect()->route('customer.profile')->with('success', 'Đăng nhập thành công!');
+            return redirect()->route('customer.profile')->with('success', 'ログインに成功しました！');
         }
 
         return back()->withErrors([
-            'registration_id' => 'Registration ID hoặc mật khẩu không chính xác.',
+            'registration_id' => '登録コードまたはパスワードが正しくありません',
         ])->withInput($request->only('registration_id', 'remember'));
     }
 
@@ -42,8 +42,8 @@ class CustomerAuthController extends Controller
      */
     public function showRegisterForm()
     {
-        $countries = ['Vietnam', 'USA', 'Japan', 'France', 'Germany'];
-        $hobbies = ['Reading', 'Traveling', 'Sports', 'Music', 'Movies'];
+        $countries = ['ベトナム', 'アメリカ', '日本', 'フランス', 'ドイツ'];
+        $hobbies = ['読書', '旅行', 'スポーツ', '音楽', '映画'];   
         return view('customer.register', compact('countries', 'hobbies'));
     }
 
@@ -54,7 +54,7 @@ class CustomerAuthController extends Controller
             'email' => 'required|email|unique:admins,email|unique:customers,email',
             'name' => 'nullable|string|max:255',
             'password' => 'nullable|min:6',
-            'gender' => 'nullable|in:male,female',
+            'gender' => 'nullable|in:男,女',
             'hobbies' => 'nullable|array',
             'country' => 'nullable|string',
             'profile_picture' => 'nullable|image|mimes:jpg,png,jpeg|max:2048', 
@@ -76,7 +76,7 @@ class CustomerAuthController extends Controller
 
         $customer->sendEmailVerificationNotification();
     
-        return redirect()->route('customer.register')->with('success', 'Đăng ký thành công!');
+        return redirect()->route('customer.register')->with('success', '登録が成功しました。メールをご確認ください!');
     }
 
     public function verifyEmail(Request $request, $id, $hash)
@@ -84,16 +84,16 @@ class CustomerAuthController extends Controller
         $customer = Customer::findOrFail($id);
     
         if (!hash_equals((string) $hash, sha1($customer->getEmailForVerification()))) {
-            abort(403, 'URL xác minh không hợp lệ.');
+            abort(403, '無効な確認URLです');
         }
     
         if ($customer->hasVerifiedEmail()) {
-            return redirect()->route('customer.login')->with('info', 'Email đã được xác minh trước đó.');
+            return redirect()->route('customer.login')->with('info', 'そのメールアドレスは既に確認されています');
         }
     
         $customer->markEmailAsVerified();
         event(new Verified($customer));
     
-        return redirect()->route('customer.login')->with('success', 'Email đã được xác minh thành công.');
+        return redirect()->route('customer.login')->with('success', 'メールアドレスの確認が成功しました');
     }
 }

@@ -12,23 +12,24 @@ class AdminCustomerController extends Controller
     //Add Customer
     public function create()
     {
-        $countries = ['Vietnam', 'USA', 'Japan', 'France', 'Germany'];
-        $hobbies = ['Reading', 'Traveling', 'Sports', 'Music', 'Movies'];
+        $countries = ['ベトナム', 'アメリカ', '日本', 'フランス', 'ドイツ'];
+        $hobbies = ['読書', '旅行', 'スポーツ', '音楽', '映画'];        
         return view('admin.customer.create', compact('countries', 'hobbies'));
     }
 
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'registration_id' => 'nullable|unique:customers,registration_id|size:8',
+            'registration_id' => 'required|unique:admins,registration_id|unique:customers,registration_id|size:8',
+            'email' => 'required|email|unique:admins,email|unique:customers,email',
             'name' => 'nullable|string|max:255',
-            'email' => 'required|email|unique:customers,email',
             'password' => 'nullable|min:6',
-            'gender' => 'nullable|in:male,female',
+            'gender' => 'nullable|in:男,女',
             'hobbies' => 'nullable|array',
             'country' => 'nullable|string',
             'profile_picture' => 'nullable|image|mimes:jpg,png,jpeg|max:2048', 
         ]);
+        $validatedData['email_verified_at'] = now();
 
         $validatedData['hobbies'] = $request->hobbies ? json_encode($request->hobbies) : null;
 
@@ -44,16 +45,16 @@ class AdminCustomerController extends Controller
     
         Customer::create($validatedData);
     
-        return redirect()->route('admin.customer.index')->with('success', 'Khách hàng đã được thêm thành công!');
+        return redirect()->route('admin.customer.index')->with('success', '会員が正常に追加されました！');
     }
 
     //Edit Customer
     public function edit($id)
     {
         $customer = Customer::findOrFail($id);
-        $countries = ['Vietnam', 'USA', 'Japan', 'France', 'Germany'];
-        $hobbies = ['Reading', 'Traveling', 'Sports', 'Music', 'Movies'];
-        $selectedHobbies = $customer->hobbies ? json_decode($customer->hobbies, true) : []; // Chuyển đổi lại sở thích thành mảng
+        $countries = ['ベトナム', 'アメリカ', '日本', 'フランス', 'ドイツ'];
+        $hobbies = ['読書', '旅行', 'スポーツ', '音楽', '映画'];     
+        $selectedHobbies = $customer->hobbies ? json_decode($customer->hobbies, true) : [];
         return view('admin.customer.edit', compact('customer', 'countries', 'hobbies', 'selectedHobbies'));
     }
 
@@ -62,11 +63,11 @@ class AdminCustomerController extends Controller
         $customer = Customer::findOrFail($id);
 
         $validatedData = $request->validate([
-            'registration_id' => 'nullable|size:8|unique:customers,registration_id,' . $customer->id,
+           'registration_id' => 'nullable|size:8|unique:customers,registration_id,' . $customer->id . '|unique:admins,registration_id,' . $customer->id,
             'password' => 'nullable|min:6',
-            'email' => 'required|email|unique:customers,email,' . $customer->id,
+            'email' => 'required|email|unique:customers,email,' . $customer->id . '|unique:admins,email,' . $customer->id,
             'name' => 'nullable|string|max:255',
-            'gender' => 'nullable|in:male,female',
+            'gender' => 'nullable|in:男,女',
             'hobbies' => 'nullable|array',
             'country' => 'nullable|string',
             'profile_picture' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
@@ -89,7 +90,7 @@ class AdminCustomerController extends Controller
 
         $customer->update($validatedData);
 
-        return redirect()->route('admin.customer.index')->with('success', 'Thông tin khách hàng đã được cập nhật!');
+        return redirect()->route('admin.customer.index')->with('success', '会員情報が更新されました！');
     }
 
     // Get all Customer
@@ -130,9 +131,9 @@ class AdminCustomerController extends Controller
         $customer = Customer::find($id);
 
         if (!$customer) {
-            return redirect()->route('admin.customer.index')->with('error', 'Customer not found!');
+            return redirect()->route('admin.customer.index')->with('error', '会員が見つかりません！');
         }
         $customer->delete();
-        return redirect()->route('admin.customer.index')->with('success', 'Customer deleted successfully.');
+        return redirect()->route('admin.customer.index')->with('success', '会員が正常に削除されました');
     }
 }

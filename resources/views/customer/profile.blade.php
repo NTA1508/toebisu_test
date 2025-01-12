@@ -4,13 +4,12 @@
         <h2 class="mt-5">ユーザープロフィール</h2>
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Thông tin cá nhân</h5>
                 <p class="card-text"><strong>ID:</strong> {{ $customer->registration_id }}</p>
-                <p class="card-text"><strong>Họ tên:</strong> {{ $customer->name }}</p>
-                <p class="card-text"><strong>Email:</strong> {{ $customer->email }}</p>
-                <p class="card-text"><strong>Giới tính:</strong> {{ $customer->gender ? ucfirst($customer->gender) : 'Chưa có thông tin' }}</p>
-                <p class="card-text"><strong>Quốc gia:</strong> {{ $customer->country ?? 'Chưa có thông tin' }}</p>
-                <p class="card-text"><strong>Sở thích:</strong>
+                <p class="card-text"><strong>名前:</strong> {{ $customer->name }}</p>
+                <p class="card-text"><strong>メール:</strong> {{ $customer->email }}</p>
+                <p class="card-text"><strong>性別:</strong> {{ $customer->gender ? ucfirst($customer->gender) : '情報がありません' }}</p>
+                <p class="card-text"><strong>国:</strong> {{ $customer->country ?? '情報がありません' }}</p>
+                <p class="card-text"><strong>趣味:</strong>
                         @if($customer->hobbies)
                             {{ implode(', ', json_decode($customer->hobbies)) }}
                         @else
@@ -18,14 +17,14 @@
                         @endif
                 </p>
                 @if ($customer->profile_picture)
-                    <p><strong>Ảnh đại diện:</strong></p>
+                    <p><strong>プロフィール画像:</strong></p>
                     <img src="{{ asset('storage/' . $customer->profile_picture) }}" alt="Profile Picture" width="150">
                 @else
-                    <p>Chưa có ảnh đại diện.</p>
+                    <p>画像なし</p>
                 @endif
 
             </div>
-            <a href="{{ route('mypage.edit') }}" class="btn btn-primary">Chỉnh sửa thông tin</a>
+            <a href="{{ route('mypage.edit') }}" class="btn btn-primary">プロフィール編集</a>
         </div>
     </div>
 

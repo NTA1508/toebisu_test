@@ -16,8 +16,8 @@ class CustomerProfileController extends Controller
     public function edit()
     {
         $customer = Auth::user();
-        $countries = ['Vietnam', 'USA', 'Japan', 'France', 'Germany'];
-        $hobbies = ['Reading', 'Traveling', 'Sports', 'Music', 'Movies'];
+        $countries = ['ベトナム', 'アメリカ', '日本', 'フランス', 'ドイツ'];
+        $hobbies = ['読書', '旅行', 'スポーツ', '音楽', '映画'];   
         $selectedHobbies = $customer->hobbies ? json_decode($customer->hobbies, true) : [];
         
         return view('customer.edit', compact('customer', 'countries', 'hobbies', 'selectedHobbies'));
@@ -28,11 +28,11 @@ class CustomerProfileController extends Controller
         $customer = Auth::user();
 
         $validatedData = $request->validate([
-            'registration_id' => 'nullable|size:8|unique:customers,registration_id,' . $customer->id,
-            'name' => 'nullable|string|max:255',
-            'email' => 'required|email|unique:customers,email,' . $customer->id,
+            'registration_id' => 'nullable|size:8|unique:customers,registration_id,' . $customer->id . '|unique:admins,registration_id,' . $customer->id,
             'password' => 'nullable|min:6',
-            'gender' => 'nullable|in:male,female',
+            'email' => 'required|email|unique:customers,email,' . $customer->id . '|unique:admins,email,' . $customer->id,
+            'name' => 'nullable|string|max:255',
+            'gender' => 'nullable|in:男,女',
             'hobbies' => 'nullable|array',
             'country' => 'nullable|string',
             'profile_picture' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
@@ -53,6 +53,6 @@ class CustomerProfileController extends Controller
 
         $customer->update($validatedData);
 
-        return redirect()->route('customer.profile')->with('success', 'Thông tin của bạn đã được cập nhật!');
+        return redirect()->route('customer.profile')->with('success', 'あなたの情報は更新されました！');
     }
 }

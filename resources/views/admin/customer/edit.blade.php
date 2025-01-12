@@ -1,7 +1,7 @@
 @include('header')
 <body>
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Edit customer</h1>
+        <h1 class="text-center mb-4">会員編集</h1>
         <form action="{{ route('admin.customer.update', $customer->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             
@@ -14,7 +14,7 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label"  for="name">Tên khách hàng:</label>
+                <label class="form-label"  for="name">名前:</label>
                 <input class="form-control" type="text" name="name" id="name" value="{{ old('name', $customer->name) }}">
                 @error('name')
                     <p style="color: red;">{{ $message }}</p>
@@ -22,7 +22,7 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label"  for="email">Email:</label>
+                <label class="form-label"  for="email">メール:</label>
                 <input class="form-control" type="email" name="email" value="{{ old('email', $customer->email) }}" required>
                 @error('email')
                     <p style="color: red;">{{ $message }}</p>
@@ -30,16 +30,16 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label" >Giới tính:</label>
-                <label class="form-label" ><input class="form-check-input" type="radio" name="gender" value="male" {{ $customer->gender == 'male' ? 'checked' : '' }}> Nam</label>
-                <label class="form-label" ><input class="form-check-input" type="radio" name="gender" value="female" {{ $customer->gender == 'female' ? 'checked' : '' }}> Nữ</label>
+                <label class="form-label" >性別:</label>
+                <label class="form-label" ><input class="form-check-input" type="radio" name="gender" value="男" {{ $customer->gender == '男' ? 'checked' : '' }}> 男</label>
+                <label class="form-label" ><input class="form-check-input" type="radio" name="gender" value="女" {{ $customer->gender == '女' ? 'checked' : '' }}> 女</label>
                 @error('gender')
                     <p style="color: red;">{{ $message }}</p>
                 @enderror
             </div>
 
             <div class="mb-3">
-                <label class="form-label" >Sở thích:</label>
+                <label class="form-label" >趣味:</label>
                 <div>
                     @foreach ($hobbies as $hobby)
                         <label class="form-label" >
@@ -53,7 +53,7 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="country">Quốc gia:</label>
+                <label class="form-label" for="country">国:</label>
                 <select class="form-select" name="country" id="country">
                     @foreach ($countries as $country)
                         <option value="{{ $country }}" {{ $customer->country == $country ? 'selected' : '' }}>{{ $country }}</option>
@@ -65,7 +65,7 @@
             </div>
 
             <div class="mb-3">
-            <label for="password">Mật khẩu (để trống nếu không thay đổi):</label>
+            <label for="password">パスワード（変更しない場合は空白のままにしてください:</label>
             <input class="form-control" type="password" name="password">
             @error('password')
                 <p style="color: red;">{{ $message }}</p>
@@ -74,7 +74,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="profile_picture">Ảnh đại diện:</label>
+                <label for="profile_picture">プロフィール画像:</label>
                 @if ($customer->profile_picture)
                     <img src="{{ asset('storage/' . $customer->profile_picture) }}" alt="Profile Picture" width="100">
                 @endif
@@ -84,7 +84,7 @@
                 @enderror
             </div>
 
-            <button class="btn btn-primary" type="submit">Cập nhật</button>
+            <button class="btn btn-primary" type="submit">会員編集</button>
         </form>
     </div>
 </body>

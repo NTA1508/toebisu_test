@@ -1,7 +1,7 @@
 @include('header')
 <body>
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Edit Profile</h1>
+        <h1 class="text-center mb-4">プロフィール編集</h1>
         <form action="{{ route('mypage.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
@@ -16,7 +16,7 @@
 
             <!-- Name -->
             <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
+                <label for="name" class="form-label">名前:</label>
                 <input type="text" class="form-control" id="name" name="name" 
                     value="{{ old('name', $customer->name) }}" placeholder="Enter your name">
                 @error('name')
@@ -26,7 +26,7 @@
 
             <!-- Email -->
             <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
+                <label for="email" class="form-label">メール:</label>
                 <input type="email" class="form-control" id="email" name="email" 
                     value="{{ old('email', $customer->email) }}" placeholder="Enter your email">
                 @error('email')
@@ -36,9 +36,8 @@
 
             <!-- Country Dropdown -->
             <div class="mb-3">
-                <label for="country" class="form-label">Country</label>
+                <label for="country" class="form-label">国:</label>
                 <select class="form-select" id="country" name="country">
-                    <option value="">Select a country</option>
                     @foreach ($countries as $country)
                         <option value="{{ $country }}" {{ $customer->country == $country ? 'selected' : '' }}>
                             {{ $country }}
@@ -51,7 +50,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="password">Mật khẩu (để trống nếu không thay đổi):</label>
+                <label for="password">パスワード（変更しない場合は空白のままにしてください:</label>
                 <input type="password" class="form-control" name="password">
                 @error('password')
                     <p class="text-danger">{{ $message }}</p>
@@ -60,17 +59,17 @@
 
             <!-- Gender Radio -->
             <div class="mb-3">
-                <label class="form-label">Gender</label>
+                <label class="form-label">性別:</label>
                 <div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="gender" id="male" value="male" 
-                            {{ $customer->gender == 'male' ? 'checked' : '' }}>
-                        <label class="form-check-label" for="male">Male</label>
+                        <input class="form-check-input" type="radio" name="gender" id="男" value="男" 
+                            {{ $customer->gender == '男' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="男">男</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="gender" id="female" value="female" 
-                            {{ $customer->gender == 'female' ? 'checked' : '' }}>
-                        <label class="form-check-label" for="female">Female</label>
+                        <input class="form-check-input" type="radio" name="gender" id="女" value="女" 
+                            {{ $customer->gender == '女' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="女">女</label>
                     </div>
                 </div>
                 @error('gender')
@@ -80,7 +79,7 @@
 
             <!-- Hobbies Checkboxes -->
             <div class="mb-3">
-                <label class="form-label">Hobbies</label>
+                <label class="form-label">趣味:</label>
                 <div>
                     @foreach ($hobbies as $hobby)
                             <input class="form-check-input" type="checkbox" name="hobbies[]" id="hobby_{{ $hobby }}" 
@@ -95,7 +94,7 @@
 
             <!-- Profile Picture -->
             <div class="mb-3">
-                <label for="profile_picture" class="form-label">Profile Picture</label>
+                <label for="profile_picture" class="form-label">プロフィール画像:</label>
                 <input type="file" class="form-control" id="profile_picture" name="profile_picture">
                 @if ($customer->profile_picture)
                     <img src="{{ asset('storage/' . $customer->profile_picture) }}" alt="Profile Picture" 

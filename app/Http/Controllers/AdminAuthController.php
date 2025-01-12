@@ -38,15 +38,15 @@ class AdminAuthController extends Controller
             'password' => 'required|min:6|confirmed',
             'name' => 'nullable|string|max:255',
         ], [
-            'registration_id.required' => 'Vui lòng nhập mã đăng ký.',
-            'registration_id.unique' => 'Mã đăng ký đã được sử dụng.',
-            'registration_id.size' => 'Mã đăng ký phải có độ dài 8 ký tự.',
-            'email.required' => 'Vui lòng nhập email.',
-            'email.email' => 'Email không hợp lệ.',
-            'email.unique' => 'Email đã được sử dụng.',
-            'password.required' => 'Vui lòng nhập mật khẩu.',
-            'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
-            'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
+            'registration_id.required' => '登録コードを入力してください',
+            'registration_id.unique' => '登録コードは既に使用されています',
+            'registration_id.size' => '登録コードは8文字でなければなりません',
+            'email.required' => 'メールアドレスを入力してください',
+            'email.email' => '無効なメールアドレスです',
+            'email.unique' => 'そのメールアドレスは既に使用されています',
+            'password.required' => 'パスワードを入力してください',
+            'password.min' => 'パスワードは6文字以上でなければなりません',
+            'password.confirmed' => 'パスワードの確認が一致しません',
         ]);
 
         try {
@@ -59,9 +59,9 @@ class AdminAuthController extends Controller
 
             $admin->notify(new VerifyEmailCustom($admin));
 
-            return redirect()->route('admin.register')->with('success', 'Đăng ký thành công, vui lòng kiểm tra email để xác thực.');
+            return redirect()->route('admin.register')->with('success', '登録が成功しました。メールをご確認ください');
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Đã xảy ra lỗi khi đăng ký: ' . $e->getMessage()])->withInput();
+            return back()->withErrors(['error' => '登録中にエラーが発生しました: ' . $e->getMessage()])->withInput();
         }
     }
 
@@ -70,17 +70,17 @@ class AdminAuthController extends Controller
         $admin = Admin::findOrFail($id);
     
         if (!hash_equals((string) $hash, sha1($admin->getEmailForVerification()))) {
-            abort(403, 'URL xác minh không hợp lệ.');
+            abort(403, '無効な確認URLです');
         }
     
         if ($admin->hasVerifiedEmail()) {
-            return redirect()->route('admin.login')->with('info', 'Email đã được xác minh trước đó.');
+            return redirect()->route('admin.login')->with('info', 'そのメールアドレスは既に確認されています');
         }
     
         $admin->markEmailAsVerified();
         event(new Verified($admin));
     
-        return redirect()->route('admin.login')->with('success', 'Email đã được xác minh thành công.');
+        return redirect()->route('admin.login')->with('success', 'メールアドレスの確認が成功しました');
     }
 
     public function showLoginForm()
@@ -94,10 +94,10 @@ class AdminAuthController extends Controller
             'registration_id' => 'required|alpha_num|size:8',
             'password' => 'required|min:6',
         ], [
-            'registration_id.required' => 'Vui lòng nhập mã đăng ký.',
-            'registration_id.size' => 'Mã đăng ký phải có đúng 8 ký tự.',
-            'password.required' => 'Vui lòng nhập mật khẩu.',
-            'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
+            'registration_id.required' => '登録コードを入力してください',
+            'registration_id.size' => '登録コードは8文字でなければなりません',
+            'password.required' => 'パスワードを入力してください',
+            'password.min' => 'パスワードは6文字以上でなければなりません',
         ]);
     
         if (Auth::guard('admin')->attempt($validated, $request->filled('remember'))) {
@@ -106,15 +106,15 @@ class AdminAuthController extends Controller
             if (is_null($user->email_verified_at)) {
                 Auth::guard('admin')->logout();
                 return back()->withErrors([
-                    'registration_id' => 'Tài khoản của bạn chưa xác minh email. Vui lòng kiểm tra email để xác minh.',
+                    'registration_id' => 'あなたのアカウントはまだメール確認が完了していません。確認のためにメールをご確認ください',
                 ])->withInput($request->only('registration_id', 'remember'));
             }
     
-            return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công!');
+            return redirect()->route('admin.dashboard')->with('success', 'ログインに成功しました！');
         }
 
         return back()->withErrors([
-            'registration_id' => 'Mã đăng ký hoặc mật khẩu không chính xác.',
+            'registration_id' => '登録コードまたはパスワードが正しくありません',
         ])->withInput($request->only('registration_id', 'remember'));
     }    
 }

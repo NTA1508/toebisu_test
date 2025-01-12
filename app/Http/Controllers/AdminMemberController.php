@@ -18,19 +18,19 @@ class AdminMemberController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'registration_id' => 'required|unique:admins,registration_id|size:8',
-            'email' => 'required|email|unique:admins,email',
+            'registration_id' => 'required|unique:admins,registration_id|unique:customers,registration_id|size:8',
+            'email' => 'required|email|unique:admins,email|unique:customers,email',
             'password' => 'required|min:6',
             'name' => 'nullable|string|max:255',
         ], [
-            'registration_id.required' => 'Vui lòng nhập mã đăng ký.',
-            'registration_id.unique' => 'Mã đăng ký đã được sử dụng.',
-            'registration_id.size' => 'Mã đăng ký phải có độ dài 8 ký tự.',
-            'email.required' => 'Vui lòng nhập email.',
-            'email.email' => 'Email không hợp lệ.',
-            'email.unique' => 'Email đã được sử dụng.',
-            'password.required' => 'Vui lòng nhập mật khẩu.',
-            'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
+            'registration_id.required' => '登録コードを入力してください',
+            'registration_id.unique' => '登録コードは既に使用されています',
+            'registration_id.size' => '登録コードは8文字でなければなりません',
+            'email.required' => 'メールアドレスを入力してください',
+            'email.email' => '無効なメールアドレスです',
+            'email.unique' => 'そのメールアドレスは既に使用されています',
+            'password.required' => 'パスワードを入力してください',
+            'password.min' => 'パスワードは6文字以上でなければなりません',
         ]);
 
         Admin::create([
@@ -41,7 +41,7 @@ class AdminMemberController extends Controller
             'email_verified_at' => now(),
         ]);
 
-        return redirect()->route('admin.member.index')->with('success', 'Quản trị viên được tạo thành công.');
+        return redirect()->route('admin.member.index')->with('success', '管理者が正常に作成されました');
     }
 
     //Edit member
@@ -56,9 +56,9 @@ class AdminMemberController extends Controller
         $admin = Admin::findOrFail($id);
 
         $request->validate([
-            'registration_id' => 'nullable|size:8|unique:admins,registration_id,' . $admin->id,
+            'registration_id' => 'nullable|size:8|unique:admins,registration_id,' . $admin->id . '|unique:customers,registration_id,' . $admin->id,
             'name' => 'nullable|string|max:255',
-            'email' => 'required|email|unique:admins,email,' . $admin->id,
+            'email' => 'required|email|unique:admins,email,' . $admin->id . '|unique:customers,email,' . $admin->id,
             'password' => 'nullable|min:6',
         ]);
         
@@ -70,7 +70,7 @@ class AdminMemberController extends Controller
             'password' => $request->password ? Hash::make($request->password) : $admin->password,
         ]);
 
-        return redirect()->route('admin.member.index')->with('success', 'Thông tin quản trị viên đã được cập nhật.');
+        return redirect()->route('admin.member.index')->with('success', '管理者情報が更新されました');
     }
 
     // Get all member
@@ -109,10 +109,10 @@ class AdminMemberController extends Controller
         $admin = Admin::find($id);
 
         if (!$admin) {
-            return redirect()->route('admin.member.index')->with('error', 'Member not found!');
+            return redirect()->route('admin.member.index')->with('error', '管理者が見つかりません！');
         }
         $admin->delete();
-        return redirect()->route('admin.member.index')->with('success', 'Member deleted successfully.');
+        return redirect()->route('admin.member.index')->with('success', '管理者が正常に削除されました');
     }
 }
 

@@ -123,4 +123,16 @@ class AdminCustomerController extends Controller
             ->header('Content-Type', 'text/csv')
             ->header('Content-Disposition', "attachment; filename={$fileName}");
     }
+
+    //Delete Customer
+    public function destroy($id)
+    {
+        $customer = Customer::find($id);
+
+        if (!$customer) {
+            return redirect()->route('admin.customer.index')->with('error', 'Customer not found!');
+        }
+        $customer->delete();
+        return redirect()->route('admin.customer.index')->with('success', 'Customer deleted successfully.');
+    }
 }

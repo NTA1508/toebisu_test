@@ -103,5 +103,16 @@ class AdminMemberController extends Controller
             ->header('Content-Type', 'text/csv')
             ->header('Content-Disposition', "attachment; filename={$fileName}");
     }
+
+    public function destroy($id)
+    {
+        $admin = Admin::find($id);
+
+        if (!$admin) {
+            return redirect()->route('admin.member.index')->with('error', 'Member not found!');
+        }
+        $admin->delete();
+        return redirect()->route('admin.member.index')->with('success', 'Member deleted successfully.');
+    }
 }
 

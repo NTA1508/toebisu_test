@@ -10,6 +10,7 @@
         <a href="{{ route('admin.customer.exportCsv') }}">Export CSV</a>
     </form>
 
+    <a class="btn btn-success" href="/admin/customer/new">Add customer</a>
     <!-- Hiển thị danh sách khách hàng -->
     <table class="table mt-5">
         <thead>
@@ -52,6 +53,11 @@
                     <td>{{ $customer->country }}</td>
                     <td>
                         <a class="btn btn-success" href="{{ route('admin.customer.edit', $customer->id) }}">Chỉnh sửa</a>
+                        <form action="{{ route('customer.destroy', $customer->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE') <!-- Laravel dùng phương thức DELETE để xử lý xóa -->
+                            <button class="btn btn-danger" type="submit">Delete</button>
+                        </form>
                     </td>
                 </tr>
             @empty

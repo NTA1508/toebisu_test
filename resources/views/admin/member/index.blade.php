@@ -10,6 +10,7 @@
             <a href="{{ route('admin.member.exportCsv') }}">Export CSV</a>
         </form>
 
+        <a class="btn btn-success" href="/admin/member/new">Add member</a>
         <!-- Hiển thị danh sách quản trị viên -->
         <table class="table mt-5">
             <thead>
@@ -30,6 +31,11 @@
                         <td>{{ $admin->created_at }}</td>
                         <td>
                             <a class="btn btn-success" href="{{ route('admin.member.edit', $admin->id) }}">Edit</a>
+                            <form action="{{ route('admin.destroy', $admin->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE') <!-- Laravel dùng phương thức DELETE để xử lý xóa -->
+                            <button class="btn btn-danger" type="submit">Delete</button>
+                        </form>
                         </td>
                     </tr>
                 @empty

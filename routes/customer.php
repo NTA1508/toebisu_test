@@ -30,3 +30,8 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/mypage/edit', [CustomerProfileController::class, 'edit'])->name('mypage.edit');
     Route::post('/mypage/edit', [CustomerProfileController::class, 'update'])->name('mypage.update');
 });
+
+Route::post('/logout', function () {
+    Auth::guard('web')->logout(); // Đăng xuất Customer
+    return redirect()->route('customer.login'); // Chuyển hướng về trang login của Customer
+})->middleware(['auth:web'])->name('customer.logout');

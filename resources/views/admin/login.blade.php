@@ -33,6 +33,9 @@
                     <input class="form-check-input" type="checkbox" name="remember"> Ghi nhớ đăng nhập
                 </label>
             </div>
+            <div class="mb-3">
+               <p> Don't have an account? <a href="/admin/register">Register now</a></p>
+            </div>
             <button class="btn btn-primary" type="submit">Đăng nhập</button>
         </form>
     </div>
